@@ -63,4 +63,25 @@ class EmployeeService {
         return employeeMap.values().stream()
                 .collect(Collectors.groupingBy(e -> e.getDepartment()));
     }
+
+    //count by first letter of name
+    public Map<Character, Long> countEmployeesByFirstLetterOfName() {
+        return employeeMap.values().stream()
+                .collect(Collectors.groupingBy(e -> e.getName().charAt(0), Collectors.counting()));
+    }
+
+    //first sort by department and then by salary
+    public void sortEmployeesByDepartmentAndSalary() {
+        //sort by department and then by salary
+        employeeMap.values().stream()
+                        .sorted((e1, e2) -> e1.getDepartment().compareTo(e2.getDepartment()))
+                        .sorted((e1, e2) -> Double.compare(e1.getSalary(), e2.getSalary()))
+                        .forEach(System.out::println);
+    }
+
+    //highest salary employee
+    public Optional<Employee> getHighestSalaryEmployee() {
+        return employeeMap.values().stream()
+                .max((e1, e2) -> Double.compare(e1.getSalary(), e2.getSalary()));
+    }
 }

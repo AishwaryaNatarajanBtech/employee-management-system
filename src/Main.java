@@ -38,6 +38,9 @@ public static void main(String[] args) throws EmployeeNotFoundException {
     service.sortEmployeeBySalary().forEach(e -> System.out.println("Sorted Employee: " + e));
     System.out.println("Total Employees: " + service.getEmployeeCount());
     System.out.println("Grouped Employees: " + service.groupEmployeesByDepartment());
+    service.sortEmployeesByDepartmentAndSalary();
+    System.out.println("Count by First Letter of Name: " + service.countEmployeesByFirstLetterOfName());
+    System.out.println("Max Salary Employee: " + service.getMaxSalaryEmployee().orElse(null));
 
 //    System.out.println(emp1);
 //    System.out.println(emp2);
