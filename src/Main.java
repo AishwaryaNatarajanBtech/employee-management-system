@@ -3,9 +3,11 @@ import java.util.Optional;
 public static void main(String[] args) {
 
     EmployeeService service = new EmployeeService();
-
+    AutoSaveTask autoSaveTask = new AutoSaveTask(service);
+    Thread autoSaveThread = new Thread(autoSaveTask);
     try
     {
+        autoSaveThread.start();
         /*
         Employee emp1 = new Employee(1, "Alice", "HR", 50000);
         Employee emp2 = new Employee(2, "Bob", "IT", 60000);
