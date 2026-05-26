@@ -1,36 +1,57 @@
 import java.util.Optional;
 
-public static void main(String[] args) throws EmployeeNotFoundException {
-    Employee emp1 = new Employee(1, "Alice", "HR", 50000);
-    Employee emp2 = new Employee(2, "Bob", "IT", 60000);
-    Employee emp3 = new Employee(3, "Charlie", "Finance", 55000);
-    Employee emp4 = new Employee(4, "David", "IT", 70000);
-    Employee emp5 = new Employee(5, "Eve", "HR", 45000);
+public static void main(String[] args) {
 
     EmployeeService service = new EmployeeService();
-    service.addEmployee(emp1);
-    service.addEmployee(emp2);
-    service.addEmployee(emp3);
-    service.addEmployee(emp4);
-    service.addEmployee(emp5);
 
-    service.viewAllEmployees();
+    try
+    {
+        Employee emp1 = new Employee(1, "Alice", "HR", 50000);
+        Employee emp2 = new Employee(2, "Bob", "IT", 60000);
+        Employee emp3 = new Employee(3, "Charlie", "Finance", 55000);
+        Employee emp4 = new Employee(4, "David", "IT", 70000);
+        Employee emp5 = new Employee(5, "Eve", "HR", 45000);
+        Employee emp6 = new Employee(5, "Eve", "HR", -4);
+
+        service.add(emp1);
+        service.add(emp2);
+        service.add(emp3);
+        service.add(emp4);
+        service.add(emp5);
+        service.add(emp5);
+        service.add(emp6);
+    } catch (DuplicateEmployeeException e) {
+        System.out.println(e.getMessage());
+    } catch (InvalidSalaryException e) {
+        System.out.println(e.getMessage());
+    }
 
 
-    service.printUpperCaseNames();
-    service.filterEmployeesBySalary(55000).forEach(e -> System.out.println("Filtered Employee: " + e));
+    //service.viewAllEmployees();
 
-    Optional<Employee> empOpt = service.getEmployeeById(1);
-    empOpt.ifPresent(e -> System.out.println("Employee found: " + e));
-    //empOpt.ifPresentOrThrow(() -> new EmployeeNotFoundException("Employee not found"));
+    //service.printUpperCaseNames();
+    //service.filterEmployeesBySalary(55000).forEach(e -> System.out.println("Filtered Employee: " + e));
+
+    try
+    {
+        Employee employee = service.getEmployeeById(10);
+        System.out.println("Employee found: " + employee);
+    } catch (EmployeeNotFoundException e) {
+        System.out.println(e.getMessage());
+    }
+    
+    /*
+    Employee employee = service.getEmployeeById(1);
+    System.out.println("Employee found: " + employee);
+    */
     //if employee not found throw custom exception
-    empOpt.orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+    //Employee employee = service.getEmployeeById(10); // This will throw EmployeeNotFoundException if not found
 
-    empOpt = service.getEmployeeById(10);
+    //Employee employee = service.getEmployeeById(10);
     //this is to learn orElse
-    empOpt.orElse(null);
+    //empOpt.orElse(null);
 
-    empOpt.orElseGet(() -> {
+    /*empOpt.orElseGet(() -> {
         System.out.println("Employee not found");
         return null;
     });
@@ -41,6 +62,7 @@ public static void main(String[] args) throws EmployeeNotFoundException {
     service.sortEmployeesByDepartmentAndSalary();
     System.out.println("Count by First Letter of Name: " + service.countEmployeesByFirstLetterOfName());
     System.out.println("Max Salary Employee: " + service.getMaxSalaryEmployee().orElse(null));
+    */
 
 //    System.out.println(emp1);
 //    System.out.println(emp2);

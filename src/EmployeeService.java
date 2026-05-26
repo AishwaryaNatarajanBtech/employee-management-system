@@ -13,11 +13,17 @@ class EmployeeService {
         this.employeeMap = new HashMap<>();
     }
 
-    public void addEmployee(Employee employee) {
+    public static void validateSalary(double salary) throws InvalidSalaryException {
+        if (salary < 0) {
+            throw new InvalidSalaryException("Salary cannot be negative");
+        }
+    }
+
+    public void add(Employee employee) throws DuplicateEmployeeException {
         //employees.add(employee);
 
         if(employeeMap.containsKey(employee.getId())) {
-            throw new IllegalArgumentException("Employee with id " + employee.getId() + " already exists");
+            throw new DuplicateEmployeeException("Employee with id " + employee.getId() + " already exists");
         }
 
         employeeMap.put(employee.getId(), employee);
@@ -27,10 +33,20 @@ class EmployeeService {
         employeeMap.values().forEach(e -> System.out.println(e));
     }
 
-    public Optional<Employee> getEmployeeById(int id) {
+    public Optional<Employee> get(int id) {
         Optional<Employee> employeeOpt = Optional.ofNullable(employeeMap.get(id));
         return employeeOpt;
     }
+
+    public Employee getEmployeeById(int id) throws EmployeeNotFoundException {
+        Optional<Employee> employeeOpt = get(id);
+        if (employeeOpt.isPresent()) {
+            return employeeOpt.get();
+        } else {
+            throw new EmployeeNotFoundException("Employee with id " + id + " not found");
+        }
+    }
+
 
     public List<Employee> filterEmployeesBySalary(double minSalary) {
         return employeeMap.values().stream()

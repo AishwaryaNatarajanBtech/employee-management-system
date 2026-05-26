@@ -4,7 +4,7 @@ class Employee {
     private String department;
     private double salary;
 
-    public Employee(int id, String name, String department, double salary) {
+    public Employee(int id, String name, String department, double salary) throws InvalidSalaryException {
         this.id = id;
 
         if(name == null || name.isEmpty()) {
@@ -13,9 +13,7 @@ class Employee {
         this.name = name;
         this.department = department;
 
-        if (salary < 0) {
-            throw new IllegalArgumentException("Salary cannot be negative");
-        }
+        EmployeeService.validateSalary(salary);
         this.salary = salary;
     }
 
