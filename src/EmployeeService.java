@@ -1,4 +1,6 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 //import java.nio.Buffer;
@@ -48,10 +50,6 @@ class EmployeeService {
     public void saveEmployeesToFile() {
         //code to save employees to file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("employees.txt"))) {
-            //time in yyyy-MM-ddTHH:mm:ss+00:00 format
-            String currentTime = java.time.ZonedDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
-            writer.write("Employee data saved at: " + currentTime);
-            writer.newLine();
             for (Employee employee : employeeMap.values()) {
                 writer.write(employee.toString());
                 writer.newLine();
@@ -59,6 +57,29 @@ class EmployeeService {
             System.out.println("Employees saved to file successfully.");
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    public void loadEmployeesFromFile() throws InvalidEmployeeDataException, DuplicateEmployeeException {
+        //code to load employees from file
+        try (BufferedReader reader = new BufferedReader(new FileReader("employees.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 4) {
+                    int id = Integer.parseInt(parts[0]);
+                    String name = parts[1];
+                    String department = parts[2];
+                    double salary = Double.parseDouble(parts[3]);
+                    Employee employee = new Employee(id, name, department, salary);
+                    add(employee);
+                }
+            }
+            System.out.println("Employees loaded from file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error reading from file: " + e.getMessage());
+        } catch (InvalidEmployeeDataException | DuplicateEmployeeException e) {
+            System.out.println("Error processing employee data: " + e.getMessage());
         }
     }
 

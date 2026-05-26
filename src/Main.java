@@ -6,23 +6,30 @@ public static void main(String[] args) {
 
     try
     {
+        /*
         Employee emp1 = new Employee(1, "Alice", "HR", 50000);
         Employee emp2 = new Employee(2, "Bob", "IT", 60000);
         Employee emp3 = new Employee(3, "Charlie", "Finance", 55000);
         Employee emp4 = new Employee(4, "David", "IT", 70000);
         Employee emp5 = new Employee(5, "Eve", "HR", 45000);
+        */
 //        Employee emp6 = new Employee(5, "Eve", "HR", -4);
 //        Employee emp7 = new Employee(6, "   ", "HR", 45000);
 //        Employee emp8 = new Employee(7, "Frank", "", 45000);
 
+        /* 
         service.add(emp1);
         service.add(emp2);
         service.add(emp3);
         service.add(emp4);
         service.add(emp5);
+        */
        // service.add(emp5);
         
-        service.saveEmployeesToFile();
+        //service.saveEmployeesToFile();
+
+        service.loadEmployeesFromFile();
+        service.viewAllEmployees();
     } catch (DuplicateEmployeeException e) {
         System.out.println(e.getMessage());
     } catch (InvalidEmployeeDataException e) {
