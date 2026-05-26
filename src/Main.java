@@ -11,18 +11,21 @@ public static void main(String[] args) {
         Employee emp3 = new Employee(3, "Charlie", "Finance", 55000);
         Employee emp4 = new Employee(4, "David", "IT", 70000);
         Employee emp5 = new Employee(5, "Eve", "HR", 45000);
-        Employee emp6 = new Employee(5, "Eve", "HR", -4);
+//        Employee emp6 = new Employee(5, "Eve", "HR", -4);
+//        Employee emp7 = new Employee(6, "   ", "HR", 45000);
+//        Employee emp8 = new Employee(7, "Frank", "", 45000);
 
         service.add(emp1);
         service.add(emp2);
         service.add(emp3);
         service.add(emp4);
         service.add(emp5);
-        service.add(emp5);
-        service.add(emp6);
+       // service.add(emp5);
+        
+        service.saveEmployeesToFile();
     } catch (DuplicateEmployeeException e) {
         System.out.println(e.getMessage());
-    } catch (InvalidSalaryException e) {
+    } catch (InvalidEmployeeDataException e) {
         System.out.println(e.getMessage());
     }
 

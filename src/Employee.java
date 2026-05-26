@@ -4,16 +4,15 @@ class Employee {
     private String department;
     private double salary;
 
-    public Employee(int id, String name, String department, double salary) throws InvalidSalaryException {
+    public Employee(int id, String name, String department, double salary) throws InvalidEmployeeDataException {
         this.id = id;
 
-        if(name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be null or empty");
-        }
+        EmployeeService.validateName(name);
+        EmployeeService.validateDepartment(department);
+        EmployeeService.validateSalary(salary);
+        
         this.name = name;
         this.department = department;
-
-        EmployeeService.validateSalary(salary);
         this.salary = salary;
     }
 
@@ -33,31 +32,29 @@ class Employee {
         return salary;
     }
 
-    public void setName(String name) {
-        if(name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be null or empty");
+    public void setName(String name) throws InvalidEmployeeDataException {
+        if(name == null || name.isEmpty() || name.trim().isEmpty()) {
+            throw new InvalidEmployeeDataException("Name cannot be null or empty");
         }
         this.name = name;
     }
     
-    public void setDepartment(String department) {
+    public void setDepartment(String department) throws InvalidEmployeeDataException {
+        if(department == null || department.isEmpty() || department.trim().isEmpty()) {
+            throw new InvalidEmployeeDataException("Department cannot be null or empty");
+        }
         this.department = department;
     }
 
-    public void setSalary(double salary) {
+    public void setSalary(double salary) throws InvalidEmployeeDataException {
         if (salary < 0) {
-            throw new IllegalArgumentException("Salary cannot be negative");
+            throw new InvalidEmployeeDataException("Salary cannot be negative");
         }
         this.salary = salary;
     }
 
     @Override
     public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", department='" + department + '\'' +
-                ", salary=" + salary +
-                '}';
+        return id + "," + name + "," + department + "," + salary;
     }
 }

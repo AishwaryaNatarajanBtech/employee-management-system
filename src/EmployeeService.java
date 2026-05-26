@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+//import java.nio.Buffer;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Map;
@@ -13,9 +17,21 @@ class EmployeeService {
         this.employeeMap = new HashMap<>();
     }
 
-    public static void validateSalary(double salary) throws InvalidSalaryException {
+    public static void validateSalary(double salary) throws InvalidEmployeeDataException {
         if (salary < 0) {
-            throw new InvalidSalaryException("Salary cannot be negative");
+            throw new InvalidEmployeeDataException("Salary cannot be negative");
+        }
+    }
+
+    public static void validateName(String name) throws InvalidEmployeeDataException {
+        if (name == null || name.isEmpty() || name.trim().isEmpty()) {
+            throw new InvalidEmployeeDataException("Name cannot be null or empty");
+        }
+    }
+
+    public static void validateDepartment(String department) throws InvalidEmployeeDataException {
+        if (department == null || department.isEmpty() || department.trim().isEmpty()) {
+            throw new InvalidEmployeeDataException("Department cannot be null or empty");
         }
     }
 
@@ -27,6 +43,23 @@ class EmployeeService {
         }
 
         employeeMap.put(employee.getId(), employee);
+    }
+
+    public void saveEmployeesToFile() {
+        //code to save employees to file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("employees.txt"))) {
+            //time in yyyy-MM-ddTHH:mm:ss+00:00 format
+            String currentTime = java.time.ZonedDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
+            writer.write("Employee data saved at: " + currentTime);
+            writer.newLine();
+            for (Employee employee : employeeMap.values()) {
+                writer.write(employee.toString());
+                writer.newLine();
+            }
+            System.out.println("Employees saved to file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
     }
 
     public void viewAllEmployees() {
