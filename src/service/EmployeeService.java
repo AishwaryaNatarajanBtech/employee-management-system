@@ -1,3 +1,5 @@
+package service;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -10,7 +12,12 @@ import java.util.Map;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class EmployeeService {
+import exception.DuplicateEmployeeException;
+import exception.EmployeeNotFoundException;
+import exception.InvalidEmployeeDataException;
+import model.Employee;
+
+public class EmployeeService {
     //private List<Employee> employees;
     private Map<Integer, Employee> employeeMap;
 
@@ -62,6 +69,7 @@ class EmployeeService {
 
     public void loadEmployeesFromFile() throws InvalidEmployeeDataException, DuplicateEmployeeException {
         //code to load employees from file
+        
         try (BufferedReader reader = new BufferedReader(new FileReader("employees.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {

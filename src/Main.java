@@ -1,13 +1,36 @@
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import exception.DuplicateEmployeeException;
+import exception.InvalidEmployeeDataException;
+import service.EmployeeService;
+import task.AutoSaveTask;
+import task.CallableCountTask;
+import task.CountTask;
+
+public class Main {
 public static void main(String[] args) {
 
     EmployeeService service = new EmployeeService();
     AutoSaveTask autoSaveTask = new AutoSaveTask(service);
-    Thread autoSaveThread = new Thread(autoSaveTask);
+    CountTask countTask = new CountTask(service);
+    CallableCountTask callableCountTask = new CallableCountTask(service);
+    //Thread autoSaveThread = new Thread(autoSaveTask);
+    ExecutorService executor = Executors.newFixedThreadPool(3);
     try
     {
-        autoSaveThread.start();
+        service.loadEmployeesFromFile();
+        service.viewAllEmployees();
+
+        executor.submit(autoSaveTask);
+        executor.submit(countTask);
+
+        Future<Long> futureCount = executor.submit(callableCountTask);
+        futureCount.get(); // This will block until the CallableCountTask returns a result
+        //autoSaveThread.start();
         /*
         Employee emp1 = new Employee(1, "Alice", "HR", 50000);
         Employee emp2 = new Employee(2, "Bob", "IT", 60000);
@@ -30,12 +53,20 @@ public static void main(String[] args) {
         
         //service.saveEmployeesToFile();
 
-        service.loadEmployeesFromFile();
-        service.viewAllEmployees();
+        //service.loadEmployeesFromFile();
+        // service.viewAllEmployees();
     } catch (DuplicateEmployeeException e) {
         System.out.println(e.getMessage());
     } catch (InvalidEmployeeDataException e) {
         System.out.println(e.getMessage());
+    } catch (InterruptedException e) {
+        System.out.println("CallableCountTask interrupted: " + e.getMessage());
+    } catch (ExecutionException e) {
+        System.out.println("Error executing CallableCountTask: " + e.getCause().getMessage());
+    } catch (Exception e) {
+        System.out.println("Error in CallableCountTask: " + e.getMessage());
+    }finally {
+        executor.shutdownNow();
     }
 
 
@@ -44,6 +75,7 @@ public static void main(String[] args) {
     //service.printUpperCaseNames();
     //service.filterEmployeesBySalary(55000).forEach(e -> System.out.println("Filtered Employee: " + e));
 
+    /*
     try
     {
         Employee employee = service.getEmployeeById(10);
@@ -51,6 +83,7 @@ public static void main(String[] args) {
     } catch (EmployeeNotFoundException e) {
         System.out.println(e.getMessage());
     }
+    */
     
     /*
     Employee employee = service.getEmployeeById(1);
@@ -78,4 +111,5 @@ public static void main(String[] args) {
 
 //    System.out.println(emp1);
 //    System.out.println(emp2);
+}
 }

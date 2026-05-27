@@ -1,4 +1,8 @@
-class Employee {
+package model;
+import exception.InvalidEmployeeDataException;
+import service.EmployeeService;
+
+public class Employee {
     private int id;
     private String name;
     private String department;

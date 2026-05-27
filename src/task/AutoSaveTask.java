@@ -1,3 +1,6 @@
+package task;
+import service.EmployeeService;
+
 public class AutoSaveTask implements Runnable {
     private EmployeeService employeeService;
 
